@@ -1,0 +1,201 @@
+/* ------------ RESET BASICS ------------ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #f8fafc;
+  color: #1a202c;
+  line-height: 1.5;
+}
+
+/* ------------ LAYOUT ------------ */
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+/* Button base styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border: 2px solid transparent;
+  user-select: none;
+}
+
+/* Primary button (Logout) */
+.btn-primary {
+  background-color: #3182ce;
+  color: white;
+  border-color: #3182ce;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #2c5aa0;
+  border-color: #2c5aa0;
+  outline: none;
+}
+
+/* Secondary button (Back to Hub) */
+.btn-secondary {
+  background-color: white;
+  color: #4a5568;
+  border: 2px solid #cbd5e0;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background-color: #f7fafc;
+  border-color: #a0aec0;
+  color: #2d3748;
+  outline: none;
+}
+
+/* Icon sizing */
+.btn i {
+  font-size: 16px;
+}
+
+
+h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a202c;
+}
+
+/* button (logout & save) */
+.settings-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #4a5568;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.settings-btn:hover {
+  background: #f7fafc;
+  border-color: #cbd5e0;
+  color: #2d3748;
+}
+
+.section {
+  margin-bottom: 40px;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 12px;
+}
+
+/* ------------ grid & cards ------------ */
+.maps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* card */
+.map-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+}
+.map-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e0;
+}
+.map-card.active {
+  border-color: #3182ce;
+  box-shadow: 0 0 0 2px #3182ce;
+}
+
+/* card header */
+.map-header {
+  padding: 14px 16px;
+  background: #f7fafc;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.map-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: #2d3748;
+}
+
+/* preview image */
+.map-preview {
+  width: 100%;
+  height: 160px;
+  background: #f1f5f9;
+  object-fit: cover;
+}
+
+/* save toast */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2f855a;
+  color: #e6fffa;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.hidden { display: none; }
+
+/* mobile tweaks */
+@media (max-width: 600px) {
+  h1 { font-size: 24px; }
+  .map-preview { height: 130px; }
+}

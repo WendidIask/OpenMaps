@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head'); %>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="/css/hub.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header with user info -->
+        <div class="header">
+            <h1>My Maps</h1>
+            <a class="settings-btn" href="/settings">
+                <i class="fas fa-user-circle"></i>
+                <%= username %>
+            </a>
+        </div>
+
+        <!-- My Maps Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2>Your Maps</h2>
+            </div>
+            
+            <% if (myMaps.length) { %>
+                <div class="mapGrid">
+                    <% myMaps.forEach(map => { %>
+                        <div class="mapItem" data-mapid="<%= map.MAP_ID %>" data-mapname="<%= map.NAME %>">
+                            <div class="mapItemHeader">
+                                <h4 class="mapName" 
+                                    tabindex="0" 
+                                    role="button"
+                                    aria-label="Open map <%= map.NAME %>">
+                                    <%= map.NAME %>
+                                </h4>
+                                <button class="deleteMapBtn" 
+                                        type="button"
+                                        aria-label="Delete map <%= map.NAME %>">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            <div id="preview-<%= map.MAP_ID %>" 
+                                 class="mapPreview"
+                                 data-mapid="<%= map.MAP_ID %>" 
+                                 tabindex="0" 
+                                 role="button"
+                                 aria-label="Open map <%= map.NAME %>">
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <div class="empty-state">
+                    <i class="fas fa-map"></i>
+                    <p>No maps yet. Create your first map to get started!</p>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Shared Maps Section -->
+        <% if (sharedMaps.length) { %>
+            <div class="section">
+                <div class="section-header">
+                    <h2>Shared with You</h2>
+                </div>
+                <div class="mapGrid sharedSection">
+                    <% sharedMaps.forEach(map => { %>
+                        <div class="mapItem" data-mapid="<%= map.MAP_ID %>" data-mapname="<%= map.NAME %>">
+                            <div class="mapItemHeader">
+                                <h4 class="mapName"
+                                    tabindex="0" 
+                                    role="button"
+                                    aria-label="Open shared map <%= map.NAME %>">
+                                    <%= map.NAME %>
+                                </h4>
+                                <span class="shared-badge">
+                                    <i class="fas fa-share-alt"></i>
+                                </span>
+                            </div>
+                            <div id="shared-preview-<%= map.MAP_ID %>" 
+                                 class="mapPreview"
+                                 data-mapid="<%= map.MAP_ID %>" 
+                                 tabindex="0" 
+                                 role="button"
+                                 aria-label="Open shared map <%= map.NAME %>">
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button id="createMapBtn" aria-label="Create new map">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/js/hub.js"></script>
+</body>
+</html>

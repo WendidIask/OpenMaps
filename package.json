@@ -1,0 +1,26 @@
+{
+  "name": "mymaps",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node createLogin.js",
+    "poststart": "node login.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bindings": "^1.5.0",
+    "cors": "^2.8.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-async-handler": "^1.2.0",
+    "express-session": "^1.18.1",
+    "express-validator": "^7.2.1",
+    "react": "^19.1.0",
+    "sqlite3": "^5.1.7"
+  }
+}

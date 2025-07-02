@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head'); %>
+    <link rel="stylesheet" href="/css/settings.css" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Settings</title>
+  </head>
+
+  <body class="container">
+    <header class="header">
+        <h1>Settings</h1>
+        <div class="header-buttons">
+            <a href="/hub" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Hub
+            </a>
+            <button id="logoutBtn" class="btn btn-primary">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </header>
+
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Leaflet Map Style</h2>
+      </div>
+      <div id="stylesGrid" class="maps-grid">
+      </div>
+    </section>
+
+    <div id="toast" class="toast hidden">Saved ✔️</div>
+
+    <script src="/js/settings.js" defer></script>
+    <script src="https://kit.fontawesome.com/8ad9d02e4c.js" crossorigin="anonymous"></script>
+  </body>
+</html>

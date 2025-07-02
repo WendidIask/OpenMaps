@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head'); %>
+    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-card">
+            <div class="form-section active" id="login-section">
+                <h2>Welcome Back</h2>
+                <form action="/auth" method="post">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="username" placeholder="Username" id="login-username" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password" placeholder="Password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="auth-btn">Sign In</button>
+                </form>
+                <p class="switch-text">
+                    Don't have an account? 
+                    <span class="switch-link" onclick="switchForm()">Sign up</span>
+                </p>
+            </div>
+
+            <div class="form-section" id="register-section">
+                <h2>Create Account</h2>
+                <form action="/register" method="post">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="username" placeholder="Username" id="register-username" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password" placeholder="Password" id="register-password" required>
+                    </div>
+                    <button type="submit" class="auth-btn">Sign Up</button>
+                </form>
+                <p class="switch-text">
+                    Already have an account? 
+                    <span class="switch-link" onclick="switchForm()">Sign in</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchForm() {
+            const loginSection = document.getElementById('login-section');
+            const registerSection = document.getElementById('register-section');
+            
+            loginSection.classList.toggle('active');
+            registerSection.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Include common head partial (title, meta, favicon, etc.) -->
+    <%- include('./partials/head'); %>
+
+    <!-- CSS: your app styles and Leaflet styles -->
+    <link rel="stylesheet" href="/css/map.css" />
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="" />
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+
+    <!-- Pass server data to JS -->
+    <script>
+        window.USER_MAP_STYLE = '<%= userMapStyle %>';
+        window.SHAPES = (<%- JSON.stringify(shapes || []) %>).map(shape => ({
+            id: shape.SHAPE_ID,
+            name: shape.NAME,
+            geojson: JSON.parse(shape.GEOJSON),
+            color: shape.COLOR,
+            weight: shape.WIDTH
+        }));
+
+        window.MAP_CONFIG = {
+            lat: <%= lat %>,
+            lon: <%= lon %>,
+            zoom: <%= zoom %>
+        };
+
+        window.BOUNDS = <%- JSON.stringify(bounds) %>;
+    </script>
+</head>
+<body>
+    <div id="map"></div>
+
+    <% if (isOwner) { %>
+        <section id="sharePanel">
+            <h3>Share Map</h3>
+            <input type="text" id="shareUsername" placeholder="Username to share with" autocomplete="off" />
+            <button id="btnShare" type="button">Add Editor</button>
+
+            <h4>Editors</h4>
+            <ul id="editorsList">
+                <li>Loading editors...</li>
+            </ul>
+            <div id="shareMessage" class="error-message"></div>
+        </section>
+    <% } %>
+
+    <!-- Sidebar -->
+    <aside id="sidebar">
+        <h3 id="sidebarHeader" tabindex="0" role="button" aria-expanded="true" aria-controls="lineList">Lines ▼</h3>
+        <ul id="lineList"></ul>
+    </aside>
+
+    <!-- Style Pane -->
+    <section id="stylePane" hidden>
+        <h4>Style</h4>
+        <label>
+            Color
+            <input type="color" id="styColor" value="#3388ff" />
+        </label>
+        <label>
+            Width
+            <input type="range" id="styW" min="1" max="12" value="3" />
+            <span id="wVal">3</span> px
+        </label>
+        <button id="closeSty" type="button" aria-label="Close Style Pane">× Close</button>
+    </section>
+
+    <!-- Leaflet scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+
+    <!-- App scripts -->
+    <script type="module" src="/js/map/init.js"></script>
+    <% if (isOwner) { %>
+        <script type="module" src="/js/share.js"></script>
+    <% } %>
+</body>
+</html>

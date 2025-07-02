@@ -1,0 +1,460 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f8fafc;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-size: clamp(12px, 1.2vw, 16px);
+}
+
+#map {
+    height: 100vh;
+    width: 100%;
+}
+
+/* --- Leaflet base styles overrides --- */
+.leaflet-container {
+    height: 100%;
+    width: 100%;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
+}
+
+.leaflet-bar {
+    box-shadow: 0 0.3vw 1.5vw rgba(0, 0, 0, 0.08);
+    border-radius: clamp(8px, 1vw, 12px);
+    background: white;
+    border: 1px solid #e2e8f0;
+}
+
+.leaflet-bar a {
+    background-color: white;
+    border-bottom: 1px solid #e2e8f0;
+    color: #3182ce;
+    display: block;
+    width: clamp(24px, 2.5vw, 32px);
+    height: clamp(24px, 2.5vw, 32px);
+    line-height: clamp(24px, 2.5vw, 32px);
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: clamp(12px, 1.2vw, 16px);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.leaflet-bar a:hover {
+    background-color: #f8fafc;
+    color: #2c5aa0;
+    transform: translateY(-0.1vw);
+}
+
+.leaflet-bar a:last-child {
+    border-bottom: none;
+}
+
+/* --- Custom Back to Hub Button --- */
+.leaflet-control .leaflet-bar a[href="/hub"] {
+    font-weight: 600;
+    color: #3182ce;
+}
+
+/* --- Sidebar styles --- */
+#sidebar {
+    position: fixed;
+    top: 1.5vw;
+    right: 1.5vw;
+    width: clamp(160px, 16vw, 224px);
+    max-height: calc(100vh - 3vw);
+    overflow-y: auto;
+    background: white;
+    border-radius: clamp(8px, 1vw, 12px);
+    box-shadow: 0 0.3vw 1.5vw rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+    z-index: 1000;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+#sidebarHeader {
+    user-select: none;
+    padding: clamp(10px, 1.2vw, 16px) clamp(13px, 1.4vw, 19px);
+    background: #3182ce;
+    color: white;
+    margin: 0;
+    font-weight: 600;
+    font-size: clamp(11px, 1.1vw, 14px);
+    cursor: pointer;
+    border-radius: clamp(8px, 1vw, 12px) clamp(8px, 1vw, 12px) 0 0;
+    letter-spacing: -0.3px;
+    transition: all 0.2s ease;
+}
+
+#sidebarHeader:hover {
+    background: linear-gradient(135deg, #2c5aa0 0%, #2a5298 100%);
+}
+
+#sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#sidebar li.sidebarRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: clamp(8px, 1vw, 13px) clamp(13px, 1.4vw, 19px);
+    border-bottom: 1px solid #e2e8f0;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+    color: #2d3748;
+}
+
+#sidebar li.sidebarRow:last-child {
+    border-bottom: none;
+}
+
+#sidebar li.sidebarRow:hover {
+    background-color: #f8fafc;
+}
+
+#sidebar li.sidebarRow.activeRow {
+    background: linear-gradient(135deg, rgba(49, 130, 206, 0.1) 0%, rgba(44, 90, 160, 0.1) 100%);
+    border-left: clamp(2px, 0.3vw, 4px) solid #3182ce;
+    color: #3182ce;
+    font-weight: 500;
+}
+
+#sidebar li.sidebarRow span {
+    flex-grow: 1;
+    padding-right: clamp(6px, 0.7vw, 10px);
+    word-break: break-word;
+    font-size: clamp(10px, 0.8vw, 11px);
+}
+
+#sidebar li.sidebarRow button {
+    margin-left: clamp(3px, 0.5vw, 6px);
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: clamp(10px, 1vw, 13px);
+    line-height: 1;
+    padding: clamp(3px, 0.4vw, 5px);
+    user-select: none;
+    transition: all 0.2s ease;
+    border-radius: clamp(3px, 0.4vw, 5px);
+    color: #718096;
+}
+
+#sidebar li.sidebarRow button:hover {
+    background-color: #e2e8f0;
+    color: #3182ce;
+    transform: scale(1.1);
+}
+
+#sidebar li.sidebarRow button[title="Delete"] {
+    color: #e53e3e;
+}
+
+#sidebar li.sidebarRow button[title="Delete"]:hover {
+    background-color: #fed7d7;
+    color: #c53030;
+}
+
+/* --- Style Pane --- */
+#stylePane {
+    position: fixed;
+    left: 1.5vw;
+    bottom: 1.5vw;
+    width: clamp(144px, 14.4vw, 192px);
+    padding: clamp(13px, 1.4vw, 19px);
+    border-radius: clamp(8px, 1vw, 12px);
+    background: white;
+    box-shadow: 0 0.3vw 1.5vw rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+    z-index: 1000;
+    display: none;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+#stylePane h4 {
+    margin-top: 0;
+    margin-bottom: clamp(10px, 1.2vw, 16px);
+    color: #1a202c;
+    font-size: clamp(11px, 1.1vw, 14px);
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+#stylePane label {
+    display: block;
+    margin-bottom: clamp(8px, 1vw, 13px);
+    cursor: pointer;
+    color: #2d3748;
+    font-weight: 500;
+    font-size: clamp(10px, 0.8vw, 11px);
+}
+
+#stylePane input[type="color"] {
+    vertical-align: middle;
+    margin-left: clamp(6px, 0.7vw, 10px);
+    cursor: pointer;
+    border: 2px solid #e2e8f0;
+    border-radius: clamp(3px, 0.4vw, 5px);
+    padding: 2px;
+    width: clamp(24px, 2.4vw, 32px);
+    height: clamp(19px, 1.9vw, 26px);
+    transition: all 0.2s ease;
+}
+
+#stylePane input[type="color"]:focus {
+    border-color: #3182ce;
+    box-shadow: 0 0 0 0.2vw rgba(49, 130, 206, 0.1);
+}
+
+#stylePane input[type="range"] {
+    vertical-align: middle;
+    margin-left: clamp(6px, 0.7vw, 10px);
+    cursor: pointer;
+    accent-color: #3182ce;
+}
+
+#stylePane #wVal {
+    margin-left: clamp(3px, 0.5vw, 6px);
+    font-weight: 600;
+    color: #3182ce;
+}
+
+#stylePane button#closeSty {
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    font-size: clamp(10px, 0.8vw, 11px);
+    line-height: 1;
+    color: #718096;
+    cursor: pointer;
+    padding: clamp(5px, 0.5vw, 6px) clamp(6px, 0.7vw, 10px);
+    float: right;
+    border-radius: clamp(3px, 0.4vw, 5px);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+#stylePane button#closeSty:hover {
+    background: #e2e8f0;
+    color: #2d3748;
+    transform: translateY(-0.1vw);
+}
+
+/* --- Share Panel --- */
+#sharePanel {
+    position: absolute;
+    top: 1vh;
+    left: 4vw;
+    width: clamp(160px, 16vw, 240px);
+    max-height: calc(100vh - 3vw);
+    overflow-y: auto;
+    background: white;
+    border-radius: clamp(8px, 1vw, 12px);
+    padding: clamp(13px, 1.4vw, 19px);
+    box-shadow: 0 0.3vw 1.5vw rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    z-index: 1100;
+}
+
+#sharePanel h3 {
+    margin: 0 0 clamp(10px, 1.2vw, 16px);
+    color: #1a202c;
+    font-size: clamp(13px, 1.2vw, 16px);
+    font-weight: 600;
+    letter-spacing: -0.3px;
+}
+
+#sharePanel h4 {
+    margin: clamp(13px, 1.4vw, 19px) 0 clamp(6px, 0.7vw, 10px);
+    color: #2d3748;
+    font-size: clamp(11px, 1vw, 13px);
+    font-weight: 600;
+}
+
+#sharePanel input[type=text] {
+    width: 100%;
+    padding: clamp(6px, 0.7vw, 10px) clamp(8px, 1vw, 13px);
+    margin-bottom: clamp(8px, 1vw, 13px);
+    box-sizing: border-box;
+    border: 2px solid #e2e8f0;
+    border-radius: clamp(5px, 0.5vw, 6px);
+    font-size: clamp(10px, 0.8vw, 11px);
+    color: #2d3748;
+    background: white;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+#sharePanel input[type=text]:focus {
+    border-color: #3182ce;
+    box-shadow: 0 0 0 0.2vw rgba(49, 130, 206, 0.1);
+}
+
+#sharePanel input[type=text]::placeholder {
+    color: #a0aec0;
+}
+
+#sharePanel button#btnShare {
+    width: 100%;
+    padding: clamp(6px, 0.7vw, 10px) clamp(8px, 1vw, 13px);
+    background: #3182ce;
+    border: none;
+    color: white;
+    font-size: clamp(10px, 0.8vw, 11px);
+    font-weight: 500;
+    border-radius: clamp(5px, 0.5vw, 6px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: -0.2px;
+}
+
+#sharePanel button#btnShare:hover {
+    background: linear-gradient(135deg, #2c5aa0 0%, #2a5298 100%);
+    transform: translateY(-0.1vw);
+}
+
+#sharePanel button#btnShare:disabled {
+    background: #cbd5e0;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#editorsList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#editorsList li {
+    border-bottom: 1px solid #e2e8f0;
+    padding: clamp(6px, 0.7vw, 10px) 0;
+    color: #2d3748;
+    font-size: clamp(10px, 0.8vw, 11px);
+}
+
+#editorsList li:last-child {
+    border-bottom: none;
+}
+
+.error-message {
+    color: #e53e3e;
+    font-size: clamp(10px, 0.8vw, 11px);
+    margin-top: clamp(6px, 0.7vw, 10px);
+    padding: clamp(5px, 0.5vw, 6px) clamp(6px, 0.7vw, 10px);
+    background: #fed7d7;
+    border-radius: clamp(3px, 0.4vw, 5px);
+    border-left: clamp(2px, 0.3vw, 4px) solid #e53e3e;
+}
+
+/* --- Fix Leaflet control layering --- */
+.leaflet-top.leaflet-left {
+    z-index: 1001;
+}
+
+/* --- Responsive breakpoints --- */
+@media (max-width: 1200px) {
+    body {
+        font-size: clamp(11px, 1.5vw, 15px);
+    }
+    
+    #sidebar {
+        width: clamp(144px, 20vw, 208px);
+    }
+    
+    #sharePanel {
+        width: clamp(144px, 20vw, 224px);
+    }
+    
+    #stylePane {
+        width: clamp(128px, 17.6vw, 176px);
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: clamp(12px, 2vw, 16px);
+    }
+    
+    #sidebar {
+        width: clamp(224px, 72vw, 256px);
+        top: 2vw;
+        right: 2vw;
+    }
+
+    #sharePanel {
+        width: clamp(224px, 72vw, 256px);
+        top: 2vw;
+        left: 2vw;
+    }
+
+    #stylePane {
+        width: clamp(192px, 68vw, 224px);
+        left: 2vw;
+        bottom: 2vw;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: clamp(13px, 3vw, 17px);
+    }
+    
+    #sidebar, #sharePanel, #stylePane {
+        width: clamp(208px, 76vw, 272px);
+        left: 2.5vw;
+        right: 2.5vw;
+    }
+
+    #sidebar {
+        right: 2.5vw;
+        left: auto;
+    }
+
+    #sharePanel {
+        left: 2.5vw;
+        right: auto;
+    }
+    
+    .leaflet-bar a {
+        width: clamp(28px, 4vw, 36px);
+        height: clamp(28px, 4vw, 36px);
+        line-height: clamp(28px, 4vw, 36px);
+        font-size: clamp(14px, 2vw, 18px);
+    }
+}
+
+@media (max-width: 320px) {
+    body {
+        font-size: clamp(14px, 4vw, 18px);
+    }
+    
+    #sidebar, #sharePanel, #stylePane {
+        width: calc(100vw - 5vw);
+        left: 2.5vw;
+        right: 2.5vw;
+    }
+}
