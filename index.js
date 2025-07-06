@@ -133,14 +133,11 @@ const mapNameValidation = [
 // Authentication routes
 app.post('/register', userValidation, asyncHandler(async (req, res) => {
     assertValid(req);
-    
     const { username, password } = req.body;
     
-    // Check if user exists
     const existing = await fetchFirst(mainDB, 'SELECT 1 FROM users WHERE username = ?', username);
     if (existing) return res.status(409).send('User already exists');
 
-    // Create user
     const hash = await bcrypt.hash(password, HASH_SALT_ROUNDS);
     const insertId = await execute(mainDB,
         'INSERT INTO users (username, password) VALUES (?, ?)',
@@ -183,11 +180,9 @@ const renderWithUser = (template) => (req, res) => {
 app.get('/', renderWithUser('index'));
 app.get('/settings', renderWithUser('settings'));
 
-// Hub - optimized with single query
+// Hub
 app.get('/hub', mustBeLoggedIn, asyncHandler(async (req, res) => {
     const uid = req.session.user.ID;
-
-    // Single query to get both owned and shared maps
     const maps = await fetchAll(mainDB, `
         SELECT m.*, 
                CASE WHEN m.owner_id = ? THEN 'owned' ELSE 'shared' END as access_type
@@ -245,7 +240,6 @@ app.get('/map', mustBeLoggedIn, asyncHandler(async (req, res) => {
 
     const bounds = calculateBounds(shapes);
 
-    // Map 'default' or null style to 'osm'
     let userMapStyle = user?.map_style;
     if (userMapStyle === 'default') userMapStyle = 'osm';
 
@@ -267,8 +261,6 @@ app.post('/deleteMap', mustBeLoggedIn, asyncHandler(async (req, res) => {
     if (!await checkMapOwnership(req.session.user.ID, mapId)) {
         return res.status(403).json({ error: 'You do not have permission to delete this map' });
     }
-
-    // Delete in parallel for better performance
     await Promise.all([
         execute(mainDB, 'DELETE FROM mapshares WHERE map_id = ?', [mapId]),
         execute(shapesDB, 'DELETE FROM shapes WHERE map_id = ?', [mapId]),
@@ -347,15 +339,10 @@ app.post('/share', mustBeLoggedIn, shareValidation, asyncHandler(async (req, res
         return res.status(403).json({ error: 'Not owner.' });
     }
 
-    const editor = await fetchFirst(mainDB,
-        'SELECT id FROM users WHERE username=?', editorUsername);
+    const editor = await fetchFirst(mainDB, 'SELECT id FROM users WHERE username=?', editorUsername);
     if (!editor) return res.status(404).json({ error: 'User not found.' });
+    if (editor.ID === owner) return res.status(400).json({ error: "You can't share with yourself." });
 
-    if (editor.ID === owner) {
-        return res.status(400).json({ error: "You can't share with yourself." });
-    }
-
-    // Check for existing share and insert if not exists in single query
     try {
         await execute(mainDB,
             'INSERT INTO mapshares (map_id, user_id) VALUES (?, ?)', 
@@ -403,7 +390,7 @@ app.post('/unshare', mustBeLoggedIn, shareValidation, asyncHandler(async (req, r
     res.json({ ok: true });
 }));
 
-// preview shapes
+// Preview shapes
 app.get('/api/map/:mapid/shapes',
     param('mapid').isInt().toInt(),
     asyncHandler(async (req, res) => {
@@ -417,7 +404,6 @@ app.get('/api/map/:mapid/shapes',
 // Get current user's map style
 app.get('/user/style', mustBeLoggedIn, asyncHandler(async (req, res) => {
     const result = await fetchFirst(mainDB, 'SELECT map_style FROM users WHERE id = ?', req.session.user.ID);
-
     res.json({ style: result?.map_style });
 }));
 
@@ -442,7 +428,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Graceful shutdown
+// Server stuff
 process.on('SIGTERM', () => {
     console.log('SIGTERM received, closing databases...');
     mainDB.close();
@@ -450,7 +436,6 @@ process.on('SIGTERM', () => {
     process.exit(0);
 });
 
-// Start server
 app.listen(PORT, () => {
     console.log(`Server listening on http://localhost:${PORT}`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
